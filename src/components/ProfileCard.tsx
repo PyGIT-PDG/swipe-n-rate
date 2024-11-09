@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, TouchEvent } from "react";
 import StarRating from "./StarRating";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -18,6 +18,7 @@ const ProfileCard = ({ profile, onSwipe }: ProfileCardProps) => {
   const [swipeAnimation, setSwipeAnimation] = useState<"left" | "right" | null>(
     null
   );
+  const [touchStart, setTouchStart] = useState<number | null>(null);
   const { toast } = useToast();
 
   const handleRatingChange = (newRating: number) => {
@@ -36,6 +37,30 @@ const ProfileCard = ({ profile, onSwipe }: ProfileCardProps) => {
     }, 500);
   };
 
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStart === null) return;
+
+    const touchEnd = e.changedTouches[0].clientX;
+    const swipeDistance = touchEnd - touchStart;
+
+    // Minimum swipe distance threshold (in pixels)
+    const minSwipeDistance = 50;
+
+    if (Math.abs(swipeDistance) >= minSwipeDistance) {
+      if (swipeDistance > 0) {
+        handleSwipe("right");
+      } else {
+        handleSwipe("left");
+      }
+    }
+
+    setTouchStart(null);
+  };
+
   return (
     <div
       className={`relative w-full max-w-sm mx-auto ${
@@ -45,12 +70,15 @@ const ProfileCard = ({ profile, onSwipe }: ProfileCardProps) => {
           ? "animate-swipe-right"
           : ""
       }`}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="relative bg-white rounded-2xl shadow-xl overflow-hidden">
         <img
           src={profile.image}
           alt={profile.name}
           className="w-full h-96 object-cover"
+          draggable="false"
         />
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
