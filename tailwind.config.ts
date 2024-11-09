@@ -52,6 +52,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        tinder: {
+          primary: "#FE3C72",
+          secondary: "#FF7854",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,10 +71,20 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "swipe-right": {
+          "0%": { transform: "translateX(0) rotate(0)", opacity: "1" },
+          "100%": { transform: "translateX(200%) rotate(30deg)", opacity: "0" },
+        },
+        "swipe-left": {
+          "0%": { transform: "translateX(0) rotate(0)", opacity: "1" },
+          "100%": { transform: "translateX(-200%) rotate(-30deg)", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "swipe-right": "swipe-right 0.5s ease-out forwards",
+        "swipe-left": "swipe-left 0.5s ease-out forwards",
       },
     },
   },
